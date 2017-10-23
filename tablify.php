@@ -58,7 +58,7 @@ function table($data) {
   $first = (strpos($data[0][0], '<') == 0 ? $data[1] : $data[0]);
 	$thead = thead($first);
 	$tbody = tbody(array_slice($data, 2));
-	$table = "<div class=\"responsive-table\">\n<table class=\"responsive-table__table\">" . $thead . $tbody . "</table>\n</div>\n";
+	$table = "<div class=\"responsive-table\">\n<table class=\"responsive-table__table\" role=\"grid\">" . $thead . $tbody . "</table>\n</div>\n";
 		
 	return $table;
 }
@@ -74,7 +74,7 @@ function row($row , $wrap) {
 
 function thead($row) {
     $ths = row($row, "th");
-	$output = "\n<thead>\n<tr>" . $ths . "</tr>\n</thead>\n";
+	$output = "\n<thead role=\"grid\">\n<tr role=\"row\">" . $ths . "</tr>\n</thead>\n";
 	
 	return $output;
 }
@@ -82,14 +82,14 @@ function thead($row) {
 function rows($rows) {
 	$trs = "";
 	foreach($rows as $row) {
-		$trs .= "<tr>\n" . row($row, "td") . "</tr>\n";
+		$trs .= "<tr role=\"row\">\n" . row($row, "td") . "</tr>\n";
 	} 
 	
 	return $trs;
 }
 
 function tbody($rows) {
-	$tbs = "<tbody>\n" . rows($rows, "tb") . "</tbody>\n";
+	$tbs = "<tbody role=\"grid\">\n" . rows($rows, "tb") . "</tbody>\n";
 	
 	return $tbs;
 }
