@@ -8,6 +8,10 @@ table.responsive-table__table {
   margin: 0;
 }
 
+.responsive-table .col-centered {
+  text-align: center;
+}
+
 .responsive-table__table th,
 .responsive-table__table td {
   padding: 20px;
