@@ -36,15 +36,16 @@ add_shortcode('responsive_table', bn_create_table_shortcode);
 function bn_create_table_shortcode($stdin, $content="") {
 	$trimmed = trim($content);
 	$splitted = explode("\n", $trimmed);
+  $escaped_commas = str_replace('\,', '\$', $splitted);
 
 	$data = array(); 
 
-	foreach($splitted as $looped) {
+	foreach($escaped_commas as $looped) {
 		$data[] = explode(",", $looped);
 	}
 
+  $new_data = array();
 	$table = table($data);
-
   $content = $table;
 
   return $content;
@@ -66,7 +67,8 @@ function table($data) {
 function row($row , $wrap) {
 	$columns = "";
 	foreach($row as $column) {
-		$columns .= "<" . $wrap . ">" . $column . "</" . $wrap . ">\n";
+    $replaced_column = str_replace('\$', ',', $column);
+		$columns .= "<" . $wrap . ">" . $replaced_column . "</" . $wrap . ">\n";
 	}
 	
 	return $columns; 
