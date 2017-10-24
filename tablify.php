@@ -20,6 +20,16 @@ if( ! defined( 'ABSPATH' ) ) {
   die();
 }
 
+function bebug($var, $dump=True) {
+  echo "<pre style=\"background: #444;\"><code>";
+  if ($dump) {
+    var_dump($var);
+  } else {
+    echo $var;
+  }
+  echo "</code></pre>";
+}
+
 // Register style sheet.
 add_action( 'wp_enqueue_scripts', 'register_plugin_styles' );
 
@@ -33,66 +43,72 @@ function register_plugin_styles() {
 
 add_shortcode('responsive_table', bn_create_table_shortcode);
 
-function bn_create_table_shortcode($stdin, $content="") {
-	$trimmed = trim($content);
-	$splitted = explode("\n", $trimmed);
-  $escaped_commas = str_replace('\,', '\$', $splitted);
+function bn_create_table_shortcode($atts, $content="") {
+  $atts = shortcode_atts( array(
+    'centered' => '',
+  ), $atts, 'bn_create_table_shortcode' );
 
-	$data = array(); 
+  $centered_cols = str_split($atts['centered']);
+  $trimmed = trim($content);
+  $splitted = explode("\n", $trimmed);
+  $escaped_commas = str_replace('\,', '\$', $splitted);
+  $data = array(); 
 
 	foreach($escaped_commas as $looped) {
 		$data[] = explode(",", $looped);
 	}
 
-  $new_data = array();
-	$table = table($data);
+  $table = table($data, $centered_cols);
   $content = $table;
 
   return $content;
 }
 
-function table($data) {
+function table($data, $centered) {
   /*
    * Must write on new line as there is an empty array element we need to delete somehow
    * TODO: Escape commas properly, can't just split on comma willy nilly
    */
   $first = (strpos($data[0][0], '<') == 0 ? $data[1] : $data[0]);
-	$thead = thead($first);
-	$tbody = tbody(array_slice($data, 2));
-	$table = "<div class=\"responsive-table\">\n<table class=\"responsive-table__table\" role=\"grid\">" . $thead . $tbody . "</table>\n</div>\n";
-		
-	return $table;
+  $thead = thead($first, $centered);
+  $tbody = tbody(array_slice($data, 2), $centered);
+  $table = "<div class=\"responsive-table\">\n<table class=\"responsive-table__table\" role=\"grid\">" . $thead . $tbody . "</table>\n</div>\n";
+
+  return $table;
 }
 
-function row($row , $wrap) {
-	$columns = "";
-	foreach($row as $column) {
+function row($row , $wrap, $centered) {
+  $columns = "";
+  $rowCount = 1;
+  foreach($row as $column) {
+    $center_class = ($centered && in_array($rowCount, $centered) ? ' class="col-centered"' : '');
     $replaced_column = str_replace('\$', ',', $column);
-		$columns .= "<" . $wrap . ">" . $replaced_column . "</" . $wrap . ">\n";
-	}
-	
-	return $columns; 
+    $columns .= "<" . $wrap . $center_class . ">" . $replaced_column . "</" . $wrap . ">\n";
+    $rowCount++;
+  }
+
+  return $columns; 
 }
 
-function thead($row) {
-    $ths = row($row, "th");
-	$output = "\n<thead role=\"grid\">\n<tr role=\"row\">" . $ths . "</tr>\n</thead>\n";
-	
-	return $output;
+function thead($row, $centered) {
+  $ths = row($row, "th", $centered);
+  $output = "\n<thead role=\"grid\">\n<tr role=\"row\">" . $ths . "</tr>\n</thead>\n";
+
+  return $output;
 }
 
-function rows($rows) {
-	$trs = "";
-	foreach($rows as $row) {
-		$trs .= "<tr role=\"row\">\n" . row($row, "td") . "</tr>\n";
-	} 
-	
-	return $trs;
+function rows($rows, $centered) {
+  $trs = "";
+  foreach($rows as $row) {
+    $trs .= "<tr role=\"row\">\n" . row($row, "td", $centered) . "</tr>\n";
+  } 
+
+  return $trs;
 }
 
-function tbody($rows) {
-	$tbs = "<tbody role=\"grid\">\n" . rows($rows, "tb") . "</tbody>\n";
-	
-	return $tbs;
+function tbody($rows, $centered) {
+  $tbs = "<tbody role=\"grid\">\n" . rows($rows, $centered) . "</tbody>\n";
+
+  return $tbs;
 }
 
