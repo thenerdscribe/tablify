@@ -41,7 +41,7 @@ function register_plugin_styles() {
 	wp_enqueue_style( 'responsive-tables' );
 }
 
-add_shortcode('responsive_table', bn_create_table_shortcode);
+add_shortcode('responsive_table', 'bn_create_table_shortcode');
 
 function bn_create_table_shortcode($atts, $content="") {
   $atts = shortcode_atts( array(
@@ -52,7 +52,7 @@ function bn_create_table_shortcode($atts, $content="") {
   $trimmed = trim($content);
   $splitted = explode("\n", $trimmed);
   $escaped_commas = str_replace('\,', '\$', $splitted);
-  $data = array(); 
+  $data = array();
 
 	foreach($escaped_commas as $looped) {
 		$data[] = explode(",", $looped);
@@ -87,7 +87,7 @@ function row($row , $wrap, $centered) {
     $rowCount++;
   }
 
-  return $columns; 
+  return $columns;
 }
 
 function thead($row, $centered) {
@@ -101,7 +101,7 @@ function rows($rows, $centered) {
   $trs = "";
   foreach($rows as $row) {
     $trs .= "<tr role=\"row\">\n" . row($row, "td", $centered) . "</tr>\n";
-  } 
+  }
 
   return $trs;
 }
@@ -111,4 +111,3 @@ function tbody($rows, $centered) {
 
   return $tbs;
 }
-

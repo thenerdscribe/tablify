@@ -1,7 +1,7 @@
 .responsive-table {
   width: 100%;
   overflow-x: scroll;
-  margin: 30px auto 40px auto;
+  /*margin: 30px auto 40px auto;*/
 }
 
 table.responsive-table__table {
@@ -9,26 +9,47 @@ table.responsive-table__table {
 }
 
 .responsive-table .col-centered {
-  text-align: center;
+  /*text-align: center;*/
+}
+
+tr {
+  border-bottom: var(--border);
+}
+
+td {
+  padding: 0.8rem;
+  vertical-align: middle;
+  text-align: left;
+}
+
+thead th {
+  background: #fff;
+  font-weight: 600;
+  text-align: left;
+}
+
+td p {
+  margin-bottom: 0;
+  font-size: inherit;
 }
 
 .responsive-table__table th,
 .responsive-table__table td {
-  padding: 20px;
-  max-width: 20rem;
-  min-width: 16rem;
-  vertical-align: middle;
+  /*padding: 20px;*/
+  /*max-width: 20rem;*/
+  /*min-width: 16rem;*/
+  /*vertical-align: middle;*/
 }
 
 .responsive-table__table th {
-  background: #444;
-  color: #fff;
-  font-weight: 800;
-  text-align: left;
+  /*background: #444;*/
+  /*color: #fff;*/
+  /*font-weight: 800;*/
+  /*text-align: left;*/
 }
 
 .responsive-table__table tr {
-  background: #ffffff;
+  /*background: #ffffff;*/
 }
 
 .responsive-table__table tr:nth-child(1) {
@@ -36,7 +57,7 @@ table.responsive-table__table {
 }
 
 .responsive-table__table tr:nth-child(even) {
-  background: #f9f9f9;
+  /*background: #f9f9f9;*/
 }
 
 @media screen and (min-width: 720px) {
